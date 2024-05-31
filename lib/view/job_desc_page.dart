@@ -82,10 +82,10 @@ class _JobDescriptionPageState extends State<JobDescriptionPage> {
                         border: OutlineInputBorder(
                             borderSide: BorderSide(
                                 width: 2, color: AppColors.borderColor)),
-                        labelText: 'Star Performer Expectations*'),
+                        labelText: 'Nice to have skills*'),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
-                        return 'Please enter star performer expectations';
+                        return 'Please enter nice to have skills';
                       }
                       return null;
                     },

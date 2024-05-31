@@ -15,7 +15,7 @@ class AssessmentReviewScreen extends StatelessWidget {
     final createSessionViewModel =
         Provider.of<PreScreeningViewModel>(context as BuildContext);
     Map<String, String> data = {
-      'candidateId': candidateId.toString()
+      'candidateId': candidateId.toString(),
     }; //candidateId.toString()
     createSessionViewModel.submitAnswers(data);
     return Scaffold(
@@ -24,7 +24,7 @@ class AssessmentReviewScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {},
         ),
-        title: const Text('DSA Coding Conassessments - January 23'),
+        title: const Text('Assessments'),
         actions: const [
           CircleAvatar(
             child: Icon(Icons.person),
@@ -53,7 +53,7 @@ class AssessmentReviewScreen extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 buildQandAScoring(assessment.qandAScoring),
                 const SizedBox(height: 16.0),
-                buildDetailsSubmissionReport(),
+                //buildDetailsSubmissionReport(),
               ],
             ),
           );
@@ -67,7 +67,7 @@ class AssessmentReviewScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text(
-          'Bobby Williams (aka: Workable Octobriana)',
+          'Candidate Name:',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         Row(
@@ -75,9 +75,10 @@ class AssessmentReviewScreen extends StatelessWidget {
             IconButton(icon: const Icon(Icons.report), onPressed: () {}),
             IconButton(icon: const Icon(Icons.copy), onPressed: () {}),
             ElevatedButton(onPressed: () {}, child: const Text('Shortlist')),
+            ElevatedButton(onPressed: () {}, child: const Text('Reject')),
             const SizedBox(width: 8),
             ElevatedButton(
-                onPressed: () {}, child: const Text('Start Instant Interview')),
+                onPressed: () {}, child: const Text('Download Report')),
           ],
         ),
       ],
@@ -127,7 +128,7 @@ class AssessmentReviewScreen extends StatelessWidget {
         const Text('Global Benchmarking',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         const SizedBox(height: 4),
-        const Text('Top 10% out of 175,020 candidates',
+        const Text('Top 10% out of 175 Candidates',
             style: TextStyle(fontSize: 16)),
         const SizedBox(height: 4),
         Container(
