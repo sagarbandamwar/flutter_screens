@@ -10,6 +10,8 @@ import 'package:flutter_mvvm/utils/routes/routes_names.dart';
 import 'package:flutter_mvvm/view_model/candidate_viewmodel.dart';
 import 'package:provider/provider.dart';
 
+import 'create_candidate.dart';
+
 class CandidateListPage extends StatefulWidget {
   const CandidateListPage({super.key});
 
@@ -17,7 +19,7 @@ class CandidateListPage extends StatefulWidget {
   State<CandidateListPage> createState() => _CandidateListPageState();
 }
 
-class _CandidateListPageState extends State<CandidateListPage> {
+class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
   CandidateViewModel candidateViewModel = CandidateViewModel();
 
   @override
@@ -26,6 +28,32 @@ class _CandidateListPageState extends State<CandidateListPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       candidateViewModel.getCandidatesList(context);
     });
+  }
+
+  /*@override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Subscribe to RouteObserver when the widget is inserted into the widget tree
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    // Unsubscribe from RouteObserver when the widget is removed from the widget tree
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }*/
+
+  @override
+  void didPush() {
+    // Called when the current route has been pushed
+    candidateViewModel.getCandidatesList(context);
+  }
+
+  @override
+  void didPopNext() {
+    // Called when the top route has been popped and the current route shows up again
+    candidateViewModel.getCandidatesList(context);
   }
 
   @override
@@ -55,8 +83,22 @@ class _CandidateListPageState extends State<CandidateListPage> {
                       color: AppColors.green,
                       title: AppConstants.createCandidate,
                       onPress: () {
-                        Navigator.pushNamed(
-                            context, RoutesNames.createCandidate);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChangeNotifierProvider<CandidateViewModel>(
+                              create: (_) => CandidateViewModel()..onCandidateCreated = () {
+                                // Refresh the candidate list after a candidate is created
+                                setState(() {
+                                  candidateViewModel.getCandidatesList(context);
+                                });
+                              },
+                              child: const CandidatePage(),
+                            ),
+                          ),
+                        );
+                        /* Navigator.pushNamed(
+                            context, RoutesNames.createCandidate);*/
                       },
                     ),
                   ),
@@ -204,6 +246,7 @@ class _CandidateListPageState extends State<CandidateListPage> {
                                               child:
                                                   const Text('View Evaluation'),
                                             ),
+                                          const SizedBox(width: 16.0),
                                         ],
                                       ),
                                     ],

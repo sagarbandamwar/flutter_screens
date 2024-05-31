@@ -13,7 +13,7 @@ class JobsViewModel with ChangeNotifier {
     _myRepo.createJob(data).then((value) {
       Utils.printLogs(value.toString());
       Utils.printLogs('Inside On success');
-      Utils.showFlushBarSuccessMessage(value.toString(), context);
+      Utils.showFlushBarSuccessMessage('Job Created Successfully', context);
       Navigator.pushNamed(context, RoutesNames.createCandidate);
     }).onError((error, stackTrace) {
       Utils.printLogs('Inside On error');
@@ -50,10 +50,20 @@ class JobsViewModel with ChangeNotifier {
 
       // Assuming response is a JSON object with a "message" field
       final message = response['message'] as String;
-      //Navigator.pop(context, {'positionName': data['positionName'], 'message': message});
-      return {'technicalRequirements': data['technicalRequirements'], 'message': message};
+      //Utils.showFlushBarSuccessMessage('Job description generated successfully.', context);
+      //Future.delayed(const Duration(seconds: 3), () {});
+      Utils.toastMessage('Success!');
+      return {
+        'technicalRequirements': data['technicalRequirements'],
+        'message': message
+      };
     } catch (error) {
       Utils.printLogs('Inside On error generate JobDescription');
+      //Utils.showFlushBarErrorMessage('Failed to generate Job description, Try again!', context);
+      Utils.toastMessage('Failed!');
+      Future.delayed(const Duration(seconds: 3), () {
+        //Navigator.pop(context);
+      });
       Utils.printLogs(error.toString());
       return {};
     }

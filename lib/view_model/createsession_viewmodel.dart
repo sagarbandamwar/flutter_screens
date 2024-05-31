@@ -28,7 +28,7 @@ class CreateSessionViewModel with ChangeNotifier {
         // Handle successful response
         Utils.printLogs('Response->${response.body.toString()}');
         Utils.printLogs('Session created successfully');
-        Utils.showFlushBarErrorMessage('Session created successfully', context);
+        Utils.showFlushBarSuccessMessage('Session created successfully', context);
         Future.delayed(const Duration(seconds: 3), () {
           Navigator.pop(context);
         });

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mvvm/res/components/round_button.dart';
 import 'package:flutter_mvvm/utils/utils.dart';
@@ -38,114 +39,121 @@ class _CreateSessionState extends State<CreateSession> {
           end: Alignment.bottomRight,
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 100.0),
-        child: Form(
-          key: _sessionFormKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 20.0,
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    labelText: 'Duration*'),
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return 'Please enter duration';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _duration = value!;
-                },
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    labelText: 'Number of Questions*'),
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return 'Please enter number of questions';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _numberOfQuestions = value!;
-                },
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              TextFormField(
-                controller: _dateController,
-                decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    labelText: 'Select Date*'),
-                readOnly: true,
-                onTap: () {
-                  _selectDate(context);
-                },
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return 'Please enter date';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _date = value!;
-                },
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              RoundedButton(
-                title: 'Create Session',
-                onPress: () {
-                  if (_sessionFormKey.currentState?.validate() ?? false) {
-                    _sessionFormKey.currentState?.save();
-                    Map<String, String> data = {
-                      'candidateId': widget.candidateId.toString(),
-                      'duration': _duration,
-                      'numberOfQuestions': _numberOfQuestions,
-                      'date': _selectedDate!.millisecondsSinceEpoch.toString()
-                    };
-                    Utils.printLogs(
-                        'CreateSession ${'Duration: $_duration No of questions: $_numberOfQuestions Selected Date: ${_selectedDate!.millisecondsSinceEpoch}'}');
-                    createSessionViewModel.createSessionWithQueryParam(
-                        data, context);
-                  }
-                },
-              ),
-              if (createSessionViewModel.isLoading)
-                const Positioned.fill(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+      body: Stack(
+        children: [
+          AbsorbPointer(
+            absorbing: createSessionViewModel.isLoading,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 100.0),
+              child: Form(
+                key: _sessionFormKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                          labelText: 'Duration*'),
+                      validator: (value) {
+                        if (value?.isEmpty ?? true) {
+                          return 'Please enter duration';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _duration = value!;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                          labelText: 'Number of Questions*'),
+                      validator: (value) {
+                        if (value?.isEmpty ?? true) {
+                          return 'Please enter number of questions';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _numberOfQuestions = value!;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    TextFormField(
+                      controller: _dateController,
+                      decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                          labelText: 'Select Date*'),
+                      readOnly: true,
+                      onTap: () {
+                        _selectDate(context);
+                      },
+                      validator: (value) {
+                        if (value?.isEmpty ?? true) {
+                          return 'Please enter date';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _date = value!;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    RoundedButton(
+                      title: 'Create Session',
+                      onPress: () {
+                        if (_sessionFormKey.currentState?.validate() ?? false) {
+                          _sessionFormKey.currentState?.save();
+                          Map<String, String> data = {
+                            'candidateId': widget.candidateId.toString(),
+                            'duration': _duration,
+                            'numberOfQuestions': _numberOfQuestions,
+                            'date': _selectedDate!.millisecondsSinceEpoch.toString()
+                          };
+                          Utils.printLogs(
+                              'CreateSession ${'Duration: $_duration No of questions: $_numberOfQuestions Selected Date: ${_selectedDate!.millisecondsSinceEpoch}'}');
+                          createSessionViewModel.createSessionWithQueryParam(
+                              data, context);
+                        }
+                      },
+                    ),
+                    if (createSessionViewModel.isLoading)
+                      const Positioned.fill(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                  ],
                 ),
-            ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

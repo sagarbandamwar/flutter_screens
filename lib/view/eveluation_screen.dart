@@ -15,7 +15,7 @@ class AssessmentReviewScreen extends StatelessWidget {
     final createSessionViewModel =
         Provider.of<PreScreeningViewModel>(context as BuildContext);
     Map<String, String> data = {
-      'candidateId': '1716284683481'
+      'candidateId': candidateId.toString()
     }; //candidateId.toString()
     createSessionViewModel.submitAnswers(data);
     return Scaffold(

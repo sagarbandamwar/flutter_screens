@@ -34,7 +34,7 @@ class _CandidatePageState extends State<CandidatePage> {
   String? _fileName;
   PlatformFile? pickedFile;
   File? fileToDisplay;
-
+  bool _resumeUploaded = false;
   List<JobNameList> jobNames = [];
 
   @override
@@ -57,6 +57,8 @@ class _CandidatePageState extends State<CandidatePage> {
         _fileName = result!.files.first.name;
         pickedFile = result!.files.first;
         selectedFilePath = result!.files.first.path;
+        _resumeUploaded = true; // Set to true when a file is picked
+
         // fileToDisplay = File(pickedFile!.path.toString());
         Utils.printLogs('File Name $_fileName');
       }
@@ -82,172 +84,200 @@ class _CandidatePageState extends State<CandidatePage> {
           end: Alignment.bottomRight,
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 100.0),
-        child: Form(
-          key: _candidateFormKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20.0),
-              TextFormField(
-                decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    labelText: 'Candidate Name*'),
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return 'Please enter your name';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _name = value!;
-                },
-              ),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    labelText: 'Contact Number*'),
-                keyboardType: TextInputType.phone,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(10),
-                ],
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return 'Please enter valid contact number';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _contact = value!;
-                },
-              ),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2, color: AppColors.borderColor)),
-                    labelText: 'Email'),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return 'Please enter valid Email Id';
-                  }
-                  if (!_isValidEmail(value!)) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _email = value!;
-                },
-              ),
-              const SizedBox(height: 20.0),
-              GestureDetector(
-                onTap: () {
-                  //_showJobNameDropdown(context);
-                  _showJobNameDropdown(context, jobsResponse.data!.jobsList!);
-                },
-                child: AbsorbPointer(
-                  child: TextFormField(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 100.0),
+            child: Form(
+              key: _candidateFormKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20.0),
+                  const Text('Note:- Once candidate created successfully it will start appearing on candidate list.',
+                    style: TextStyle(
+                        fontFamily: 'Roboto-Regular',
+                        fontSize: 12.0,
+                        color: AppColors.grayColor),
+                  ),
+                  const SizedBox(height: 5.0),
+                  TextFormField(
                     decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 2, color: AppColors.borderColor)),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 2, color: AppColors.borderColor)),
-                      labelText: 'Job Name',
-                      suffixIcon: Icon(Icons.arrow_drop_down),
-                    ),
-                    controller: TextEditingController(text: _jobName),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2, color: AppColors.borderColor)),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2, color: AppColors.borderColor)),
+                        labelText: 'Candidate Name*'),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
-                        return 'Please Select Job from Drop down menu';
+                        return 'Please enter your name';
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      _jobName = value!;
+                      _name = value!;
                     },
                   ),
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              TextButton(
-                onPressed: () async {
-                  await pickFile();
-                  setState(() {
-                    isLoading = false;
-                  });
-                  if (pickedFile != null) {
-                    SizedBox(
-                      height: 300,
-                      width: 400,
-                      child: Text(
-                        'picked file: $pickedFile',
-                        style: const TextStyle(
-                          fontFamily: 'sourcesanspro_bold',
+                  const SizedBox(height: 20.0),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2, color: AppColors.borderColor)),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2, color: AppColors.borderColor)),
+                        labelText: 'Contact Number*'),
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(10),
+                    ],
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'Please enter valid contact number';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _contact = value!;
+                    },
+                  ),
+                  const SizedBox(height: 20.0),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2, color: AppColors.borderColor)),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2, color: AppColors.borderColor)),
+                        labelText: 'Email'),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'Please enter valid Email Id';
+                      }
+                      if (!_isValidEmail(value!)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _email = value!;
+                    },
+                  ),
+                  const SizedBox(height: 20.0),
+                  GestureDetector(
+                    onTap: () {
+                      //_showJobNameDropdown(context);
+                      _showJobNameDropdown(
+                          context, jobsResponse.data!.jobsList!);
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 2, color: AppColors.borderColor)),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 2, color: AppColors.borderColor)),
+                          labelText: 'Job Name',
+                          suffixIcon: Icon(Icons.arrow_drop_down),
                         ),
+                        controller: TextEditingController(text: _jobName),
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return 'Please Select Job from Drop down menu';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _jobName = value!;
+                        },
                       ),
-                    );
-                  }
-                },
-                child: isLoading
-                    ? const CircularProgressIndicator() // show loading indicator
-                    : const Text('Upload Resume'),
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
+                  TextButton(
+                    onPressed: () async {
+                      await pickFile();
+                      setState(() {
+                        isLoading = false;
+                      });
+                      if (pickedFile != null) {
+                        // Set the flag to true when a resume is uploaded
+                        _resumeUploaded = true;
+                      }
+                      if (pickedFile != null) {
+                        SizedBox(
+                          height: 300,
+                          width: 400,
+                          child: Text(
+                            'picked file: $pickedFile',
+                            style: const TextStyle(
+                              fontFamily: 'sourcesanspro_bold',
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: isLoading
+                        ? const CircularProgressIndicator() // show loading indicator
+                        : const Text('Upload Resume'),
+                  ),
+                  const SizedBox(height: 20.0),
+                  _fileName != null
+                      ? Text(
+                          'File Name: $_fileName',
+                          style: const TextStyle(fontSize: 16.0),
+                        )
+                      : Container(),
+                  const SizedBox(height: 20.0),
+                  RoundedButton(
+                    title: "Submit Candidate",
+                    onPress: () {
+                      if (_candidateFormKey.currentState?.validate() ?? false) {
+                        _candidateFormKey.currentState?.save();
+                        // Validate resume upload along with other fields
+                        if (!_resumeUploaded) {
+                          // Show an error message if resume is not uploaded
+                          Utils.showFlushBarErrorMessage(
+                              'Please select/upload resume to proceed',
+                              context);
+                          return;
+                        }
+                        // Do something with the form data, like submit it
+                        Utils.printLogs('fullName: $_name');
+                        Utils.printLogs('JobName: $_jobName');
+                        Utils.printLogs('Email: $_email');
+                        Utils.printLogs('Contact: $_contact');
+                        Utils.printLogs('Job Id: $_jobId');
+                        Map<String, String> data = {
+                          'jobId': _jobId.toString(),
+                          'fullName': _name,
+                          'email': _email
+                        };
+                        candidateViewModel.createCandidate(
+                            data, context, pickedFile);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                ],
               ),
-              const SizedBox(height: 20.0),
-              _fileName != null
-                  ? Text(
-                      'File Name: $_fileName',
-                      style: const TextStyle(fontSize: 16.0),
-                    )
-                  : Container(),
-              const SizedBox(height: 20.0),
-              RoundedButton(
-                title: "Submit Candidate",
-                onPress: () {
-                  if (_candidateFormKey.currentState?.validate() ?? false) {
-                    _candidateFormKey.currentState?.save();
-                    // Do something with the form data, like submit it
-                    Utils.printLogs('fullName: $_name');
-                    Utils.printLogs('JobName: $_jobName');
-                    Utils.printLogs('Email: $_email');
-                    Utils.printLogs('Contact: $_contact');
-                    Utils.printLogs('Job Id: $_jobId');
-                    Map<String, String> data = {
-                      'jobId': _jobId.toString(),
-                      'fullName': _name,
-                      'email': _email
-                    };
-                    candidateViewModel.createCandidate(
-                        data, context, pickedFile);
-                    Utils.showFlushBarSuccessMessage(
-                        'Candidate created successfully!', context);
-                  }
-                },
-              ),
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
-        ),
+          if (isLoading)
+            const Positioned.fill(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+        ],
       ),
     );
   }

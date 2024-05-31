@@ -33,15 +33,18 @@ class _FormExampleState extends State<CreateJob> {
   String _location = '';
   String _description = '';
   String? _nameError;
+  bool isLoading = false;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
   @override
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final jobsViewModel = Provider.of<JobsViewModel>(context);
@@ -54,46 +57,20 @@ class _FormExampleState extends State<CreateJob> {
           end: Alignment.bottomRight,
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 100.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const SizedBox(
-                height: 20.0,
-              ),
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderSide:
-                      BorderSide(width: 2, color: AppColors.borderColor)),
-                  border: OutlineInputBorder(
-                      borderSide:
-                      BorderSide(width: 2, color: AppColors.borderColor)),
-                  labelText: 'Job Title*',
-                ),
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return 'Please enter job title';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _name = value!;
-                },
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              GestureDetector(
-                onTap: () {
-                  _showJobLocationDropdown(context);
-                },
-                child: AbsorbPointer(
-                  child: TextFormField(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 100.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  TextFormField(
+                    controller: _nameController,
                     decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -101,123 +78,148 @@ class _FormExampleState extends State<CreateJob> {
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
                               width: 2, color: AppColors.borderColor)),
-                      labelText: 'Location Type*',
-                      suffixIcon: Icon(Icons.arrow_drop_down),
+                      labelText: 'Job Title*',
                     ),
-                    controller: TextEditingController(text: _location),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
-                        return 'Please enter type of location';
+                        return 'Please enter job title';
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      _location = value!;
+                      _name = value!;
                     },
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 7,
-                    child: TextFormField(
-                      controller: _descriptionController,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 2, color: AppColors.borderColor)),
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 2, color: AppColors.borderColor)),
-                        labelText: 'Description',
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _showJobLocationDropdown(context);
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 2, color: AppColors.borderColor)),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 2, color: AppColors.borderColor)),
+                          labelText: 'Location Type*',
+                          suffixIcon: Icon(Icons.arrow_drop_down),
+                        ),
+                        controller: TextEditingController(text: _location),
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return 'Please enter type of location';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _location = value!;
+                        },
                       ),
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return 'Please enter a description';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _description = value!;
-                      },
                     ),
                   ),
-                  const SizedBox(width: 12.0),
-                  Expanded(
-                    flex: 3,
-                    child: RoundedButton(
-                      // set data from next screen
-                      onPress: () async {
-                        final result = await Navigator.pushNamed(
-                            context, RoutesNames.generateJobDesc);
-                        if (result != null) {
-                          final data = result as Map<String, String>;
-                          setState(() {
-                            _nameController.text = data['technicalRequirements']!;
-                            _descriptionController.text = data['message']!;
-                          });
-                        }
-                      },
-                      title: 'Generate Description',
-                    ),
+                  const SizedBox(
+                    height: 20.0,
                   ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  RoundedButton(
-                    title: 'Submit Data',
-                    loading: false,
-                    onPress: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        _formKey.currentState?.save();
-                        // Do something with the form data, like submit it
-                        Utils.printLogs('Name: $_name');
-                        Utils.printLogs('Location: $_location');
-                        Utils.printLogs('Description: $_description');
-
-                        Map data = {
-                          'jobName': _name,
-                          'jobDesc': _description,
-                          'jobType': _location
-                        };
-                        // print('data: $data');
-                        //jobsViewModel.createJob(data, context);
-                        Utils.printLogs('data:$data');
-                        jobsViewModel.createJob(data, context);
-                      }
-                    },
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 7,
+                        child: TextFormField(
+                          controller: _descriptionController,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 2, color: AppColors.borderColor)),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 2, color: AppColors.borderColor)),
+                            labelText: 'Description',
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Please enter a description';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            _description = value!;
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 12.0),
+                      Expanded(
+                        flex: 3,
+                        child: RoundedButton(
+                          // set data from next screen
+                          onPress: () async {
+                            final result = await Navigator.pushNamed(
+                                context, RoutesNames.generateJobDesc);
+                            if (result != null) {
+                              final data = result as Map<String, String>;
+                              setState(() {
+                                _nameController.text =
+                                    data['technicalRequirements']!;
+                                _descriptionController.text = data['message']!;
+                              });
+                            }
+                          },
+                          title: 'Generate Description',
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 20),
-                  /*RoundedButton(
-                      title: 'Next Button',
-                      loading: false,
-                      onPress: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          _formKey.currentState?.save();
-                          Utils.printLogs('inside next button');
-                          Map data = {
-                            'jobsId': Utils.randomNumberGenerator(context),
-                            'jobName': _name,
-                            'jobDesc': _description,
-                            'jobType': _location
-                          };
-                          jobsViewModel.createJob(data, context);
-                        }
-                      },
-                  ),*/
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RoundedButton(
+                        title: 'Create Job',
+                        loading: true,
+                        onPress: () async {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            _formKey.currentState?.save();
+                            // Do something with the form data, like submit it
+                            Utils.printLogs('Name: $_name');
+                            Utils.printLogs('Location: $_location');
+                            Utils.printLogs('Description: $_description');
+                            setState(() {
+                              isLoading = true;
+                            });
+                            Map data = {
+                              'jobName': _name,
+                              'jobDesc': _description,
+                              'jobType': _location
+                            };
+                            Utils.printLogs('data:$data');
+                            await jobsViewModel.createJob(data, context);
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
+          if (isLoading)
+            const Positioned.fill(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+        ],
       ),
     );
   }

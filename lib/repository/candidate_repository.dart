@@ -23,10 +23,11 @@ class CandidateRepository {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Utils.printLogs('File uploaded successfully');
       } else {
-        Utils.printLogs('File upload failed with status: ${response.statusCode}');
+        Utils.printLogs(
+            'File upload failed with status: ${response.statusCode}');
       }
     } catch (e) {
-      print('$e');
+      Utils.printLogs('$e');
       rethrow;
     }
   }
@@ -42,7 +43,7 @@ class CandidateRepository {
       Utils.printLogs("candidate List ${candidates.toString()}");
       return candidates;
     } catch (e) {
-      print('$e');
+      Utils.printLogs('$e');
       rethrow;
     }
   }
@@ -56,7 +57,7 @@ class CandidateRepository {
       Utils.printLogs("Jobs List $jobs");
       return jobs;
     } catch (e) {
-      print('$e');
+      Utils.printLogs('$e');
       rethrow;
     }
   }

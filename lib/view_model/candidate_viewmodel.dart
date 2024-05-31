@@ -11,6 +11,8 @@ class CandidateViewModel with ChangeNotifier {
   final _myRepo = CandidateRepository();
   ApiResponse<CandidateListModel> candidateList = ApiResponse.loading();
   ApiResponse<JobNameList> jobsList = ApiResponse.loading();
+  // Call back function
+  void Function()? onCandidateCreated;
 
   setCandidateListList(ApiResponse<CandidateListModel> response) {
     candidateList = response;
@@ -28,9 +30,11 @@ class CandidateViewModel with ChangeNotifier {
     _myRepo.createCandidate(data, filePath).then((value) {
       Utils.printLogs('Inside On success');
       Utils.printLogs(value.toString());
-      Utils.showFlushBarErrorMessage(value.toString(), context);
+      Utils.showFlushBarSuccessMessage(
+          'Candidate created successfully!', context);
       Future.delayed(const Duration(seconds: 3), () {
         Navigator.pop(context);
+        onCandidateCreated?.call();
       });
       //Navigator.pushNamed(context, RoutesNames.home);
     }).onError((error, stackTrace) {

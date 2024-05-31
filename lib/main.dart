@@ -8,12 +8,14 @@ import 'package:flutter_mvvm/view_model/jobs_viewmodel.dart';
 import 'package:flutter_mvvm/view_model/preScreeningViewModel.dart';
 import 'package:provider/provider.dart';
 
+
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
+  final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PreScreeningViewModel()),
       ],
       child: MaterialApp(
+        navigatorObservers: [routeObserver],
         title: 'Admin',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
