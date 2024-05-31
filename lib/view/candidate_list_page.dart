@@ -31,20 +31,6 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
     });
   }
 
-  /*@override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Subscribe to RouteObserver when the widget is inserted into the widget tree
-    routeObserver.subscribe(this, ModalRoute.of(context)!);
-  }
-
-  @override
-  void dispose() {
-    // Unsubscribe from RouteObserver when the widget is removed from the widget tree
-    routeObserver.unsubscribe(this);
-    super.dispose();
-  }*/
-
   @override
   void didPush() {
     // Called when the current route has been pushed
@@ -193,8 +179,7 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                         ),
                                       ),
                                       const SizedBox(width: 30.0),
-                                      Text(
-                                        'Status:-> ${candidate?.status?.toString()}',
+                                      Text('Status:-> ${formatStatus(candidate?.status?.toString())}',
                                         style: TextStyle(
                                           fontFamily: 'Roboto-Regular',
                                           fontSize: 12.0,
@@ -295,5 +280,18 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
     final random = Random();
     int index = random.nextInt(avatarImages.length);
     return avatarImages[index];
+  }
+
+  String formatStatus(String? status) {
+    switch (status) {
+      case 'sessionGenerated':
+        return 'Session Generated';
+      case 'sessionInitiated':
+        return 'Session Initiated';
+      case 'evaluationComplete':
+        return 'Evaluation Completed';
+      default:
+        return status ?? 'Unknown Status';
+    }
   }
 }
