@@ -4,27 +4,61 @@ import 'package:provider/provider.dart';
 
 import '../view_model/preScreeningViewModel.dart';
 
-class AssessmentReviewScreen extends StatelessWidget {
-  final int candidateId;
+class AssessmentReviewScreen extends StatefulWidget {
+  final int? candidateId;
 
-  AssessmentReviewScreen({required this.candidateId, Key? key})
+  final candidateName;
+  final jobName;
+
+  AssessmentReviewScreen(
+      {required this.candidateId,
+      required this.candidateName,
+      required this.jobName,
+      Key? key})
       : super(key: key);
 
   @override
+  State<AssessmentReviewScreen> createState() => _AssessmentReviewScreenState();
+}
+
+class _AssessmentReviewScreenState extends State<AssessmentReviewScreen> {
+  late PreScreeningViewModel createSessionViewModel;
+  bool isApiCalled = false;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    if (!isApiCalled) {
+      createSessionViewModel = Provider.of<PreScreeningViewModel>(context);
+      Map<String, String> data = {
+        'candidateId': widget.candidateId.toString(),
+      }; //candidateId.toString()
+      createSessionViewModel.submitAnswers(data);
+      isApiCalled = true;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final createSessionViewModel =
-        Provider.of<PreScreeningViewModel>(context as BuildContext);
-    Map<String, String> data = {
-      'candidateId': candidateId.toString(),
-    }; //candidateId.toString()
-    createSessionViewModel.submitAnswers(data);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {},
         ),
-        title: const Text('Assessments'),
+        title: Text.rich(
+          TextSpan(
+            text: '${widget.jobName}', // The part you want to be bold
+            style: const TextStyle(fontWeight: FontWeight.bold),
+            children: const <TextSpan>[
+              TextSpan(
+                text: ' Assessments', // The part you want to be normal
+                style: TextStyle(fontWeight: FontWeight.normal),
+              ),
+            ],
+          ),
+        ),
         actions: const [
           CircleAvatar(
             child: Icon(Icons.person),
@@ -43,7 +77,7 @@ class AssessmentReviewScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildCandidateInfo(),
+                buildCandidateInfo(widget.candidateName),
                 const SizedBox(height: 16.0),
                 buildScoreSummary(assessment),
                 const SizedBox(height: 16.0),
@@ -62,12 +96,12 @@ class AssessmentReviewScreen extends StatelessWidget {
     );
   }
 
-  Widget buildCandidateInfo() {
+  Widget buildCandidateInfo(String? candidateName) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          'Candidate Name:',
+        Text(
+          'Candidate Name: ${candidateName?.toTitleCase()}',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         Row(
@@ -75,10 +109,15 @@ class AssessmentReviewScreen extends StatelessWidget {
             IconButton(icon: const Icon(Icons.report), onPressed: () {}),
             IconButton(icon: const Icon(Icons.copy), onPressed: () {}),
             ElevatedButton(onPressed: () {}, child: const Text('Shortlist')),
+            const SizedBox(width: 8),
             ElevatedButton(onPressed: () {}, child: const Text('Reject')),
             const SizedBox(width: 8),
             ElevatedButton(
-                onPressed: () {}, child: const Text('Download Report')),
+                onPressed: () {
+                  createSessionViewModel
+                      .downloadReport(widget.candidateId.toString());
+                },
+                child: const Text('Download Report')),
           ],
         ),
       ],
@@ -195,7 +234,8 @@ class AssessmentReviewScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               Text(content, style: const TextStyle(fontSize: 14)),
             ],
@@ -260,7 +300,8 @@ class AssessmentReviewScreen extends StatelessWidget {
                         style: const TextStyle(fontSize: 14)),
                     const SizedBox(height: 8),
                     Text('Score: ${qa.score}',
-                        style: const TextStyle(fontSize: 14, color: Colors.grey)),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey)),
                   ],
                 ),
               ),
@@ -306,11 +347,11 @@ class AssessmentReviewScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(title,
-                    style:
-                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold)),
                 Text('Score: $totalScore',
-                    style:
-                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold)),
               ],
             ),
             // SizedBox(height: 8),
@@ -324,4 +365,14 @@ class AssessmentReviewScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+extension StringCasingExtension on String {
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
 }

@@ -11,6 +11,7 @@ import 'package:flutter_mvvm/view_model/candidate_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 import 'create_candidate.dart';
+import 'eveluation_screen.dart';
 
 class CandidateListPage extends StatefulWidget {
   const CandidateListPage({super.key});
@@ -62,7 +63,7 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
       appBar: GradientAppBar(
         title: AppConstants.candidateList,
         gradient: const LinearGradient(
-          colors: [Colors.blue, Colors.purple],
+          colors: [Colors.white, Colors.grey],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -146,7 +147,7 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                 value.candidateList.data?.candidateList?[index];
                             return Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 250.0, vertical: 6.0),
+                                  horizontal: 300.0, vertical: 6.0),
                               child: Card(
                                 elevation: 4.0,
                                 shape: RoundedRectangleBorder(
@@ -166,13 +167,14 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${candidate?.fullName}',
+                                        '${candidate?.fullName?.toTitleCase()}',
                                         style: const TextStyle(
                                             fontFamily: 'Roboto-Regular',
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.bold,
                                             color: AppColors.orange),
                                       ),
+                                      const SizedBox(height: 4.0),
                                       Text(
                                         'File Name:-> ${candidate?.fileName}',
                                         style: const TextStyle(
@@ -183,7 +185,7 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                       ),
                                       const SizedBox(width: 30.0),
                                       Text(
-                                        'Job Name:-> ${candidate?.jobId?.toString() ?? 'No Job ID'} - ${candidate?.jobName ?? 'No Job Name'}',
+                                        'Job Name:-> ${candidate?.jobName ?? 'No Job Name'}',
                                         style: const TextStyle(
                                           fontFamily: 'Roboto-Regular',
                                           fontSize: 12.0,
@@ -236,12 +238,16 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                             ElevatedButton(
                                               onPressed: () {
                                                 // Navigate to view evaluation
-                                                Navigator.pushNamed(
-                                                    context,
-                                                    RoutesNames
-                                                        .assessmentReviewScreen,
-                                                    arguments:
-                                                        candidate!.candidateId);
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (BuildContext context) => AssessmentReviewScreen(
+                                                      candidateId: candidate!.candidateId,
+                                                      candidateName: candidate.fullName?.toTitleCase(),
+                                                      jobName: candidate.jobName?.toTitleCase(),
+                                                    ),
+                                                  ),
+                                                );
                                               },
                                               child:
                                                   const Text('View Evaluation'),
@@ -253,9 +259,9 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                   ),
                                   onTap: () {
                                     // Handle tap if needed, e.g., navigate to a detailed view
-                                    Navigator.pushNamed(
+                                    /*Navigator.pushNamed(
                                         context, RoutesNames.createSession,
-                                        arguments: candidate!.candidateId);
+                                        arguments: candidate!.candidateId);*/
                                   },
                                 ),
                               ),

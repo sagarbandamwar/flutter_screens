@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mvvm/utils/routes/routes_names.dart';
 import 'package:flutter_mvvm/view/candidate_list_page.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_mvvm/view/eveluation_screen.dart';
 import 'package:flutter_mvvm/view/home_screen.dart';
 import 'package:flutter_mvvm/view/job_desc_page.dart';
 import 'package:flutter_mvvm/view/login_scree.dart';
+
 import '../../view/create_candidate.dart';
 import '../../view/create_job.dart';
 import '../../view/jobs_list_page.dart';
@@ -40,11 +40,12 @@ class Routes {
         return MaterialPageRoute(
             builder: (BuildContext context) =>
                 CreateSession(candidateId: candidateId));
-      case RoutesNames.assessmentReviewScreen:
+      /*case RoutesNames.assessmentReviewScreen:
         final candidateId = settings.arguments as int;
         return MaterialPageRoute(
             builder: (BuildContext context) =>
-                AssessmentReviewScreen(candidateId: candidateId));
+                AssessmentReviewScreen(candidateId: candidateId,
+                  candidateName: candidateName,));*/
       case RoutesNames.generateJobDesc:
         return MaterialPageRoute(
             builder: (BuildContext context) => const JobDescriptionPage());

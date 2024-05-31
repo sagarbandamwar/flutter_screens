@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mvvm/res/components/round_button.dart';
 import 'package:flutter_mvvm/utils/utils.dart';
@@ -34,7 +33,7 @@ class _CreateSessionState extends State<CreateSession> {
       appBar: GradientAppBar(
         title: AppConstants.createSession,
         gradient: const LinearGradient(
-          colors: [Colors.blue, Colors.purple],
+          colors: [Colors.white, Colors.grey],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -53,14 +52,19 @@ class _CreateSessionState extends State<CreateSession> {
                     const SizedBox(
                       height: 20.0,
                     ),
+                    const Text(
+                        'Note: Please enter duration in minutes i.e. 15,30,45'),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
                     TextFormField(
                       decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                              borderSide: BorderSide(
+                                  width: 2, color: AppColors.borderColor)),
                           border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                              borderSide: BorderSide(
+                                  width: 2, color: AppColors.borderColor)),
                           labelText: 'Duration*'),
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
@@ -78,11 +82,11 @@ class _CreateSessionState extends State<CreateSession> {
                     TextFormField(
                       decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                              borderSide: BorderSide(
+                                  width: 2, color: AppColors.borderColor)),
                           border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                              borderSide: BorderSide(
+                                  width: 2, color: AppColors.borderColor)),
                           labelText: 'Number of Questions*'),
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
@@ -101,11 +105,11 @@ class _CreateSessionState extends State<CreateSession> {
                       controller: _dateController,
                       decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                              borderSide: BorderSide(
+                                  width: 2, color: AppColors.borderColor)),
                           border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 2, color: AppColors.borderColor)),
+                              borderSide: BorderSide(
+                                  width: 2, color: AppColors.borderColor)),
                           labelText: 'Select Date*'),
                       readOnly: true,
                       onTap: () {
@@ -133,7 +137,8 @@ class _CreateSessionState extends State<CreateSession> {
                             'candidateId': widget.candidateId.toString(),
                             'duration': _duration,
                             'numberOfQuestions': _numberOfQuestions,
-                            'date': _selectedDate!.millisecondsSinceEpoch.toString()
+                            'date':
+                                _selectedDate!.millisecondsSinceEpoch.toString()
                           };
                           Utils.printLogs(
                               'CreateSession ${'Duration: $_duration No of questions: $_numberOfQuestions Selected Date: ${_selectedDate!.millisecondsSinceEpoch}'}');
@@ -143,10 +148,8 @@ class _CreateSessionState extends State<CreateSession> {
                       },
                     ),
                     if (createSessionViewModel.isLoading)
-                      const Positioned.fill(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      const Center(
+                        child: CircularProgressIndicator(),
                       ),
                   ],
                 ),

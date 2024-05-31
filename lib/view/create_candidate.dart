@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mvvm/model/JobNameList.dart';
 import 'package:flutter_mvvm/res/colors/app_colors.dart';
 import 'package:flutter_mvvm/res/components/round_button.dart';
+import 'package:flutter_mvvm/view/eveluation_screen.dart';
 import 'package:flutter_mvvm/view_model/candidate_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -79,7 +80,7 @@ class _CandidatePageState extends State<CandidatePage> {
       appBar: GradientAppBar(
         title: AppConstants.candidateForm,
         gradient: const LinearGradient(
-          colors: [Colors.blue, Colors.purple],
+          colors: [Colors.white, Colors.grey],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -258,7 +259,7 @@ class _CandidatePageState extends State<CandidatePage> {
                         Utils.printLogs('Job Id: $_jobId');
                         Map<String, String> data = {
                           'jobId': _jobId.toString(),
-                          'fullName': _name,
+                          'fullName': _name.toTitleCase(),
                           'email': _email
                         };
                         candidateViewModel.createCandidate(

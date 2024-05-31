@@ -52,7 +52,7 @@ class _FormExampleState extends State<CreateJob> {
       appBar: GradientAppBar(
         title: AppConstants.createNewJob,
         gradient: const LinearGradient(
-          colors: [Colors.blue, Colors.purple],
+          colors: [Colors.white, Colors.grey],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

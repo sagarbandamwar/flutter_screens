@@ -30,7 +30,7 @@ class _JobDescriptionPageState extends State<JobDescriptionPage> {
       appBar: GradientAppBar(
         title: AppConstants.jobDescription,
         gradient: const LinearGradient(
-          colors: [Colors.blue, Colors.purple],
+          colors: [Colors.white, Colors.grey],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
