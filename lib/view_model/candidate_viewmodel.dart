@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_mvvm/data/response/api_response.dart';
 import 'package:flutter_mvvm/model/JobNameList.dart';
 import 'package:flutter_mvvm/repository/candidate_repository.dart';
+import 'package:flutter_mvvm/utils/routes/routes_names.dart';
 
 import '../model/candidate_list_model.dart';
 import '../utils/utils.dart';
@@ -11,6 +12,7 @@ class CandidateViewModel with ChangeNotifier {
   final _myRepo = CandidateRepository();
   ApiResponse<CandidateListModel> candidateList = ApiResponse.loading();
   ApiResponse<JobNameList> jobsList = ApiResponse.loading();
+
   // Call back function
   void Function()? onCandidateCreated;
 
@@ -41,7 +43,7 @@ class CandidateViewModel with ChangeNotifier {
       Utils.printLogs('Inside On error');
       Utils.showFlushBarErrorMessage('Failed to create candidate', context);
       Future.delayed(const Duration(seconds: 3), () {
-        Navigator.pop(context);
+        Navigator.pushNamed(context, RoutesNames.candidateList);
       });
       Utils.printLogs(error.toString());
     });

@@ -31,6 +31,7 @@ class _CandidatePageState extends State<CandidatePage> {
 
   String? selectedFilePath;
   bool isLoading = false;
+  bool isCreateCandidateLoading = false;
   FilePickerResult? result;
   String? _fileName;
   PlatformFile? pickedFile;
@@ -51,24 +52,26 @@ class _CandidatePageState extends State<CandidatePage> {
       setState(() {
         isLoading = true;
       });
-
-      result = await FilePicker.platform
-          .pickFiles(type: FileType.any, allowMultiple: false);
+      result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx'],
+        allowMultiple: false,
+      );
       if (result != null) {
         _fileName = result!.files.first.name;
         pickedFile = result!.files.first;
         selectedFilePath = result!.files.first.path;
         _resumeUploaded = true; // Set to true when a file is picked
-
-        // fileToDisplay = File(pickedFile!.path.toString());
         Utils.printLogs('File Name $_fileName');
       }
-
       setState(() {
         isLoading = false;
       });
     } catch (e) {
       Utils.printLogs('Error:$e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -95,7 +98,8 @@ class _CandidatePageState extends State<CandidatePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20.0),
-                  const Text('Note:- Once candidate created successfully it will start appearing on candidate list.',
+                  const Text(
+                    'Note:- Once candidate created successfully it will start appearing on candidate list.',
                     style: TextStyle(
                         fontFamily: 'Roboto-Regular',
                         fontSize: 12.0,
@@ -206,9 +210,6 @@ class _CandidatePageState extends State<CandidatePage> {
                   TextButton(
                     onPressed: () async {
                       await pickFile();
-                      setState(() {
-                        isLoading = false;
-                      });
                       if (pickedFile != null) {
                         // Set the flag to true when a resume is uploaded
                         _resumeUploaded = true;
@@ -240,7 +241,7 @@ class _CandidatePageState extends State<CandidatePage> {
                   const SizedBox(height: 20.0),
                   RoundedButton(
                     title: "Submit Candidate",
-                    onPress: () {
+                    onPress: () async {
                       if (_candidateFormKey.currentState?.validate() ?? false) {
                         _candidateFormKey.currentState?.save();
                         // Validate resume upload along with other fields
@@ -262,8 +263,14 @@ class _CandidatePageState extends State<CandidatePage> {
                           'fullName': _name.toTitleCase(),
                           'email': _email
                         };
-                        candidateViewModel.createCandidate(
+                        setState(() {
+                          isCreateCandidateLoading = true;
+                        });
+                        await candidateViewModel.createCandidate(
                             data, context, pickedFile);
+                        setState(() {
+                          isCreateCandidateLoading = false;
+                        });
                       }
                     },
                   ),
@@ -272,7 +279,7 @@ class _CandidatePageState extends State<CandidatePage> {
               ),
             ),
           ),
-          if (isLoading)
+          if (isCreateCandidateLoading)
             const Positioned.fill(
               child: Center(
                 child: CircularProgressIndicator(),

@@ -1,12 +1,12 @@
 class RoutesNames {
-  static const String login = 'login_screen';
-  static const String home = 'home_screen';
-  static const String createJob = 'create_job';
-  static const String createCandidate = 'create_candidate';
-  static const String candidateList = 'candidate_list';
-  static const String jobsList = 'jobs_list';
-  static const String createSession = 'create_session';
-  static const String viewEvaluation = 'view_evaluation';
-  static const String assessmentReviewScreen = 'assessment_review_screen';
-  static const String generateJobDesc = 'generate_job_desc';
+  static const String login = 'loginScreen';
+  static const String home = 'homeScreen';
+  static const String createJob = 'createJob';
+  static const String createCandidate = 'createCandidate';
+  static const String candidateList = 'candidateList';
+  static const String jobsList = 'jobsList';
+  static const String createSession = 'createSession';
+  static const String viewEvaluation = 'viewEvaluation';
+  static const String assessmentReviewScreen = 'assessmentReviewScreen';
+  static const String generateJobDesc = 'generateJobDesc';
 }

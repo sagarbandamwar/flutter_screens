@@ -14,7 +14,7 @@ class JobsViewModel with ChangeNotifier {
       Utils.printLogs(value.toString());
       Utils.printLogs('Inside On success');
       Utils.showFlushBarSuccessMessage('Job Created Successfully', context);
-      Navigator.pushNamed(context, RoutesNames.createCandidate);
+      Navigator.pushNamed(context, RoutesNames.jobsList);
     }).onError((error, stackTrace) {
       Utils.printLogs('Inside On error');
       Utils.showFlushBarErrorMessage(error.toString(), context);

@@ -3,6 +3,7 @@ import 'package:flutter_mvvm/data/response/Status.dart';
 import 'package:flutter_mvvm/res/components/round_button.dart';
 import 'package:flutter_mvvm/utils/routes/routes_names.dart';
 import 'package:provider/provider.dart';
+import '../res/colors/app_colors.dart';
 import '../res/components/Constants.dart';
 import '../utils/gradient_app_bar.dart';
 import '../view_model/jobs_viewmodel.dart';
@@ -68,6 +69,7 @@ class _JobListPageState extends State<JobListPage> {
                           SizedBox(
                             width: 150.0,
                             child: RoundedButton(
+                              color: AppColors.orange,
                               title: 'Create Job',
                               onPress: () {
                                 Navigator.pushNamed(
@@ -80,6 +82,7 @@ class _JobListPageState extends State<JobListPage> {
                     ),
                     Expanded(
                       child: ListView.builder(
+                        reverse: true,
                         itemCount: value.jobsList.data?.jobsList?.length ?? 0,
                         itemBuilder: (context, index) {
                           var job = value.jobsList.data?.jobsList?[index];
@@ -134,7 +137,7 @@ class _JobCardState extends State<JobCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(1.0),
       ),
-      margin: EdgeInsets.symmetric(vertical: 8.0,horizontal: 20),
+      margin: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 20),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

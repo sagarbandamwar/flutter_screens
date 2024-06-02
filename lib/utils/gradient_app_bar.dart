@@ -28,7 +28,7 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Image.asset(
-                  'assets/images/app_logo_vertical.png',
+                  'assets/images/app_logo_round.png',
                   height: 30.0, // Adjust the height as needed
                 ),
               ),

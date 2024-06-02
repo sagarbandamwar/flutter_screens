@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mvvm/utils/routes/routes_names.dart';
 import 'package:flutter_mvvm/view/candidate_list_page.dart';
 import 'package:flutter_mvvm/view/create_session.dart';
-import 'package:flutter_mvvm/view/eveluation_screen.dart';
 import 'package:flutter_mvvm/view/home_screen.dart';
 import 'package:flutter_mvvm/view/job_desc_page.dart';
 import 'package:flutter_mvvm/view/login_scree.dart';
@@ -17,29 +16,41 @@ class Routes {
     switch (settings.name) {
       case RoutesNames.home:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const HomeScreen());
+          builder: (BuildContext context) => const HomeScreen(),
+          settings: const RouteSettings(name: RoutesNames.home),
+        );
       case RoutesNames.login:
         return MaterialPageRoute(
             builder: (BuildContext context) => const LoginScreen());
       case RoutesNames.createJob:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const CreateJob(
-                  title: 'create job',
-                ));
+          builder: (BuildContext context) => const CreateJob(
+            title: 'create job',
+          ),
+          settings: RouteSettings(name: RoutesNames.createJob),
+        );
       case RoutesNames.createCandidate:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const CandidatePage());
+          builder: (BuildContext context) => const CandidatePage(),
+          settings: RouteSettings(name: RoutesNames.createCandidate),
+        );
       case RoutesNames.candidateList:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const CandidateListPage());
+          builder: (BuildContext context) => const CandidateListPage(),
+          settings: RouteSettings(name: RoutesNames.candidateList),
+        );
       case RoutesNames.jobsList:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const JobListPage());
+          builder: (BuildContext context) => const JobListPage(),
+          settings: RouteSettings(name: RoutesNames.jobsList),
+        );
       case RoutesNames.createSession:
         final candidateId = settings.arguments as int;
         return MaterialPageRoute(
-            builder: (BuildContext context) =>
-                CreateSession(candidateId: candidateId));
+          builder: (BuildContext context) =>
+              CreateSession(candidateId: candidateId),
+          settings: RouteSettings(name: RoutesNames.createSession),
+        );
       /*case RoutesNames.assessmentReviewScreen:
         final candidateId = settings.arguments as int;
         return MaterialPageRoute(
@@ -48,12 +59,14 @@ class Routes {
                   candidateName: candidateName,));*/
       case RoutesNames.generateJobDesc:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const JobDescriptionPage());
+          builder: (BuildContext context) => const JobDescriptionPage(),
+          settings: RouteSettings(name: RoutesNames.generateJobDesc),
+        );
       default:
         return MaterialPageRoute(builder: (_) {
-          return const Scaffold(
+          return Scaffold(
             body: Center(
-              child: Text('No Route defined'),
+              child: Text('No Route defined for ${settings.name}'),
             ),
           );
         });

@@ -73,13 +73,16 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ChangeNotifierProvider<CandidateViewModel>(
-                              create: (_) => CandidateViewModel()..onCandidateCreated = () {
-                                // Refresh the candidate list after a candidate is created
-                                setState(() {
-                                  candidateViewModel.getCandidatesList(context);
-                                });
-                              },
+                            builder: (context) =>
+                                ChangeNotifierProvider<CandidateViewModel>(
+                              create: (_) => CandidateViewModel()
+                                ..onCandidateCreated = () {
+                                  // Refresh the candidate list after a candidate is created
+                                  setState(() {
+                                    candidateViewModel
+                                        .getCandidatesList(context);
+                                  });
+                                },
                               child: const CandidatePage(),
                             ),
                           ),
@@ -125,6 +128,7 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                 Text(value.candidateList.message.toString()));
                       case Status.COMPLETED:
                         return ListView.builder(
+                          reverse: true,
                           itemCount:
                               value.candidateList.data?.candidateList?.length ??
                                   0,
@@ -161,40 +165,64 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                             color: AppColors.orange),
                                       ),
                                       const SizedBox(height: 4.0),
-                                      Text(
-                                        'File Name:-> ${candidate?.fileName}',
-                                        style: const TextStyle(
-                                          fontFamily: 'Roboto-Regular',
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.insert_drive_file,
+                                              size: 16.0), // Add file icon here
+                                          const SizedBox(width: 4.0),
+                                          Text(
+                                            'File Name:-> ${candidate?.fileName}',
+                                            style: const TextStyle(
+                                              fontFamily: 'Roboto-Regular',
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       const SizedBox(width: 30.0),
-                                      Text(
-                                        'Job Name:-> ${candidate?.jobName ?? 'No Job Name'}',
-                                        style: const TextStyle(
-                                          fontFamily: 'Roboto-Regular',
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.settings,
+                                              size: 16.0),
+                                          // Add file icon here
+                                          const SizedBox(width: 4.0),
+                                          Text(
+                                            'Job Name:-> ${candidate?.jobName ?? 'No Job Name'}',
+                                            style: const TextStyle(
+                                              fontFamily: 'Roboto-Regular',
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       const SizedBox(width: 30.0),
-                                      Text('Status:-> ${formatStatus(candidate?.status?.toString())}',
-                                        style: TextStyle(
-                                          fontFamily: 'Roboto-Regular',
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: candidate?.status ==
-                                                  AppConstants
-                                                      .CANDIDATE_SELECTED
-                                              ? Colors.green
-                                              : candidate?.status ==
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.access_time_filled_sharp,
+                                              size: 16.0), // Add file icon here
+                                          const SizedBox(width: 4.0),
+                                          Text(
+                                            'Status:-> ${formatStatus(candidate?.status?.toString())}',
+                                            style: TextStyle(
+                                              fontFamily: 'Roboto-Regular',
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: candidate?.status ==
                                                       AppConstants
-                                                          .CANDIDATE_REJECTED
-                                                  ? Colors.red
-                                                  : Colors
-                                                      .black, // Default color
-                                        ),
+                                                          .CANDIDATE_SELECTED
+                                                  ? Colors.green
+                                                  : candidate?.status ==
+                                                          AppConstants
+                                                              .CANDIDATE_REJECTED
+                                                      ? Colors.red
+                                                      : Colors
+                                                          .black, // Default color
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       const SizedBox(height: 10.0),
                                       Row(
@@ -226,10 +254,16 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (BuildContext context) => AssessmentReviewScreen(
-                                                      candidateId: candidate!.candidateId,
-                                                      candidateName: candidate.fullName?.toTitleCase(),
-                                                      jobName: candidate.jobName?.toTitleCase(),
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        AssessmentReviewScreen(
+                                                      candidateId: candidate!
+                                                          .candidateId,
+                                                      candidateName: candidate
+                                                          .fullName
+                                                          ?.toTitleCase(),
+                                                      jobName: candidate.jobName
+                                                          ?.toTitleCase(),
                                                     ),
                                                   ),
                                                 );
