@@ -8,13 +8,18 @@ import '../utils/utils.dart';
 
 class JobsViewModel with ChangeNotifier {
   final _myRepo = JobsRepository();
+  void Function()? onJobCreated;
 
   Future<void> createJob(dynamic data, BuildContext context) async {
     _myRepo.createJob(data).then((value) {
       Utils.printLogs(value.toString());
       Utils.printLogs('Inside On success');
       Utils.showFlushBarSuccessMessage('Job Created Successfully', context);
-      Navigator.pushNamed(context, RoutesNames.jobsList);
+      Future.delayed(const Duration(seconds: 1), () {
+        onJobCreated?.call();
+        Navigator.pushNamed(context, RoutesNames.jobsList);
+
+      });
     }).onError((error, stackTrace) {
       Utils.printLogs('Inside On error');
       Utils.showFlushBarErrorMessage(error.toString(), context);

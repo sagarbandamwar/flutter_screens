@@ -25,7 +25,7 @@ class AssessmentReviewScreen extends StatefulWidget {
 class _AssessmentReviewScreenState extends State<AssessmentReviewScreen> {
   late PreScreeningViewModel createSessionViewModel;
   bool isApiCalled = false;
-
+ bool isLoading = false;
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -75,24 +75,31 @@ class _AssessmentReviewScreenState extends State<AssessmentReviewScreen> {
           }
 
           final assessment = viewModel.assessment!;
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildCandidateInfo(widget.candidateName),
-                const SizedBox(height: 16.0),
-                buildScoreSummary(assessment),
-                const SizedBox(height: 16.0),
-                buildSpotlightSection(assessment.skillsAssessment),
-                const SizedBox(height: 16.0),
-                buildProctoringSection(),
-                const SizedBox(height: 16.0),
-                buildQandAScoring(assessment.qandAScoring),
-                const SizedBox(height: 16.0),
-                //buildDetailsSubmissionReport(),
-              ],
+          return Stack(
+            children: [SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildCandidateInfo(widget.candidateName),
+                  const SizedBox(height: 16.0),
+                  buildScoreSummary(assessment),
+                  const SizedBox(height: 16.0),
+                  buildSpotlightSection(assessment.skillsAssessment),
+                  const SizedBox(height: 16.0),
+                  buildProctoringSection(),
+                  const SizedBox(height: 16.0),
+                  buildQandAScoring(assessment.qandAScoring),
+                  const SizedBox(height: 16.0),
+                  //buildDetailsSubmissionReport(),
+                ],
+              ),
             ),
+              if (isLoading)
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+            ],
           );
         },
       ),
@@ -112,10 +119,15 @@ class _AssessmentReviewScreenState extends State<AssessmentReviewScreen> {
             IconButton(icon: const Icon(Icons.report), onPressed: () {}),
             IconButton(icon: const Icon(Icons.copy), onPressed: () {}),
             ElevatedButton(onPressed: () {
+              isLoading = true;
+
               createSessionViewModel.selectOrRejectCandidate(widget.candidateId.toString(), true, context);
             }, child: const Text('Shortlist')),
             const SizedBox(width: 8),
             ElevatedButton(onPressed: () {
+              setState(() {
+                isLoading = true;
+              });
               createSessionViewModel.selectOrRejectCandidate(widget.candidateId.toString(), false, context);
             }, child: const Text('Reject')),
             const SizedBox(width: 8),

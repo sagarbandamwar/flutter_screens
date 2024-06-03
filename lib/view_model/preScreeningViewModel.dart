@@ -89,9 +89,15 @@ class PreScreeningViewModel extends ChangeNotifier {
 
   Future<void> selectOrRejectCandidate(String candidateId, bool isSelected, BuildContext context) async {
     _myRepo.selectOrRejectCandidate(candidateId,isSelected).then((value) {
-      print(value.toString());
-      Utils.showFlushBarErrorMessage(value.toString(), context);
+      print("value:${value.toString()}");
+      Navigator.pop(context);
+      Utils.showFlushBarSuccessMessage(value.toString(), context);
+
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pop(context);
+      });
     }).onError((error, stackTrace) {
+      print("error:${error}");
       Utils.printLogs('Inside On error');
       Utils.printLogs('Create Session ${error.toString()}');
       Utils.showFlushBarErrorMessage(error.toString(), context);

@@ -11,11 +11,12 @@ class SessionEvaluationRepository{
         "isSelected":isSelected,
         "candidateId":candidateId
       };
+      print("candidateId:${candidateId},${isSelected}");
       var response = await _apiServices.getPostApiResponse(AppUrls.selectCandidate, data);
 
       return response;
     } catch (e) {
-      print('$e');
+      print('error:$e');
       rethrow;
     }
   }

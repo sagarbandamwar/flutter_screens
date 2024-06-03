@@ -40,7 +40,7 @@ dependencies:
   http:
   another_flushbar:
   provider:
-  google_fonts: ^6.2.1
+  google_fonts:
 
 dev_dependencies:
   flutter_test:

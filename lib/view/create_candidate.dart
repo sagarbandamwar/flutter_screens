@@ -268,9 +268,12 @@ class _CandidatePageState extends State<CandidatePage> {
                         });
                         await candidateViewModel.createCandidate(
                             data, context, pickedFile);
-                        setState(() {
-                          isCreateCandidateLoading = false;
-                        });
+                        candidateViewModel.onCandidateCreated = (){
+                          setState(() {
+                            isCreateCandidateLoading = false;
+                          });
+                        };
+
                       }
                     },
                   ),
@@ -280,10 +283,8 @@ class _CandidatePageState extends State<CandidatePage> {
             ),
           ),
           if (isCreateCandidateLoading)
-            const Positioned.fill(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+            Center(
+              child: CircularProgressIndicator(),
             ),
         ],
       ),
