@@ -56,24 +56,24 @@ class _JobListPageState extends State<JobListPage> {
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          SizedBox(
-                            width: 150.0,
-                            child: RoundedButton(
-                              title: 'Create Candidate',
-                              onPress: () {
-                                Navigator.pushNamed(
-                                    context, RoutesNames.createCandidate);
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 25.0),
+                          // SizedBox(
+                          //   width: 150.0,
+                          //   child: RoundedButton(
+                          //     title: 'Create Candidate',
+                          //     onPress: () {
+                          //       Navigator.pushNamed(
+                          //           context, RoutesNames.createCandidate);
+                          //     },
+                          //   ),
+                          // ),
+                          // const SizedBox(width: 25.0),
                           SizedBox(
                             width: 150.0,
                             child: RoundedButton(
                               color: AppColors.orange,
-                              title: 'Create Job',
+                              title: 'Create New Job',
                               onPress: () {
                                 Navigator.pushNamed(
                                     context, RoutesNames.createJob);
@@ -157,7 +157,7 @@ class _JobCardState extends State<JobCard> {
             const SizedBox(height: 8.0),
             Text(
               widget.description,
-              maxLines: _expanded ? 100 : 5,
+              maxLines: _expanded ? 100 : 8,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: Colors.grey[600]),
             ),
@@ -168,7 +168,7 @@ class _JobCardState extends State<JobCard> {
                     _expanded = true;
                   });
                 },
-                child: const Text("Show more", textAlign: TextAlign.end),
+                child:  Align(child: Text("Show more...", textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold),),alignment: Alignment.topRight),
               ),
             const SizedBox(height: 8.0),
             Row(

@@ -198,9 +198,12 @@ class _FormExampleState extends State<CreateJob> {
                             };
                             Utils.printLogs('data:$data');
                             await jobsViewModel.createJob(data, context);
-                            setState(() {
-                              isLoading = false;
-                            });
+                            jobsViewModel.onJobCreated = (){
+                              setState(() {
+                                isLoading = false;
+                              });
+                            };
+
                           }
                         },
                       ),
@@ -214,10 +217,8 @@ class _FormExampleState extends State<CreateJob> {
             ),
           ),
           if (isLoading)
-            const Positioned.fill(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+            Center(
+              child: CircularProgressIndicator(),
             ),
         ],
       ),

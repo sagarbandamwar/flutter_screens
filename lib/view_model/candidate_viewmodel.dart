@@ -34,7 +34,7 @@ class CandidateViewModel with ChangeNotifier {
       Utils.printLogs(value.toString());
       Utils.showFlushBarSuccessMessage(
           'Candidate created successfully!', context);
-      Future.delayed(const Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 1), () {
         Navigator.pop(context);
         onCandidateCreated?.call();
       });
