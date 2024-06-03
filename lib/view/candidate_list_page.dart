@@ -128,7 +128,7 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                             child:
                                 Text(value.candidateList.message.toString()));
                       case Status.COMPLETED:
-                        var candidates = value.candidateList.data?.candidateList?? [];
+                        var candidates = value.candidateList.data?.candidateList?.reversed.toList()?? [];
                         return ListView.builder(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 250.0, vertical: 6.0),

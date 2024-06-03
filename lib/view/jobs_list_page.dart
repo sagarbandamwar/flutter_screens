@@ -3,6 +3,7 @@ import 'package:flutter_mvvm/data/response/Status.dart';
 import 'package:flutter_mvvm/res/components/round_button.dart';
 import 'package:flutter_mvvm/utils/routes/routes_names.dart';
 import 'package:provider/provider.dart';
+
 import '../res/colors/app_colors.dart';
 import '../res/components/Constants.dart';
 import '../utils/gradient_app_bar.dart';
@@ -48,7 +49,8 @@ class _JobListPageState extends State<JobListPage> {
               case Status.ERROR:
                 return Center(child: Text(value.jobsList.message.toString()));
               case Status.COMPLETED:
-                var jobs = value.jobsList.data?.jobsList?.reversed.toList() ?? [];
+                var jobs =
+                    value.jobsList.data?.jobsList?.reversed.toList() ?? [];
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
