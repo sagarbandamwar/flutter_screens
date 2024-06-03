@@ -159,7 +159,7 @@ class _CandidatePageState extends State<CandidatePage> {
                         border: OutlineInputBorder(
                             borderSide: BorderSide(
                                 width: 2, color: AppColors.borderColor)),
-                        labelText: 'Email'),
+                        labelText: 'Email*'),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
@@ -190,7 +190,7 @@ class _CandidatePageState extends State<CandidatePage> {
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
                                   width: 2, color: AppColors.borderColor)),
-                          labelText: 'Job Name',
+                          labelText: 'Job Name*',
                           suffixIcon: Icon(Icons.arrow_drop_down),
                         ),
                         controller: TextEditingController(text: _jobName),
