@@ -48,6 +48,7 @@ class _JobListPageState extends State<JobListPage> {
               case Status.ERROR:
                 return Center(child: Text(value.jobsList.message.toString()));
               case Status.COMPLETED:
+                var jobs = value.jobsList.data?.jobsList?.reversed.toList() ?? [];
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -82,10 +83,9 @@ class _JobListPageState extends State<JobListPage> {
                       const SizedBox(height: 16.0),
                       Expanded(
                         child: ListView.builder(
-                          reverse: true,
-                          itemCount: value.jobsList.data?.jobsList?.length ?? 0,
+                          itemCount: jobs.length ?? 0,
                           itemBuilder: (context, index) {
-                            var job = value.jobsList.data?.jobsList?[index];
+                            var job = jobs[index];
                             return JobCard(
                               jobTitle: job?.jobName ?? "",
                               jobType: job?.jobType ?? "",
