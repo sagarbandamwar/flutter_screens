@@ -303,25 +303,28 @@ class _AssessmentReviewScreenState extends State<AssessmentReviewScreen> {
         const SizedBox(height: 8),
         Column(
           children: qandAScoring.map((qa) {
-            return Card(
-              margin: const EdgeInsets.symmetric(vertical: 8.0),
-              // Add vertical margin for spacing between cards
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Question: ${qa.question}',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    Text('Answer: ${qa.answer}',
-                        style: const TextStyle(fontSize: 14)),
-                    const SizedBox(height: 8),
-                    Text('Score: ${qa.score}',
-                        style:
-                            const TextStyle(fontSize: 14, color: Colors.grey)),
-                  ],
+            return SizedBox(
+              width: double.infinity,
+              child: Card(
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                // Add vertical margin for spacing between cards
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Question: ${qa.question}',
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      Text('Answer: ${qa.answer}',
+                          style: const TextStyle(fontSize: 14)),
+                      const SizedBox(height: 8),
+                      Text('Score: ${qa.score}',
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey)),
+                    ],
+                  ),
                 ),
               ),
             );
