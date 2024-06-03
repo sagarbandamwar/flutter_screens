@@ -3,6 +3,7 @@ import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mvvm/model/questionModel.dart';
+import 'package:flutter_mvvm/utils/routes/routes_names.dart';
 import 'package:http/http.dart' as http;
 
 import '../repository/evaluation_repository.dart';
@@ -92,9 +93,8 @@ class PreScreeningViewModel extends ChangeNotifier {
       print("value:${value.toString()}");
       Navigator.pop(context);
       Utils.showFlushBarSuccessMessage(value.toString(), context);
-
       Future.delayed(const Duration(seconds: 1), () {
-        Navigator.pop(context);
+        Navigator.pushNamed(context, RoutesNames.candidateList);
       });
     }).onError((error, stackTrace) {
       print("error:${error}");

@@ -179,7 +179,7 @@ class _CandidatePageState extends State<CandidatePage> {
                     onTap: () {
                       //_showJobNameDropdown(context);
                       _showJobNameDropdown(
-                          context, jobsResponse.data!.jobsList!);
+                          context, jobsResponse.data!.jobsList!.reversed.toList());
                     },
                     child: AbsorbPointer(
                       child: TextFormField(

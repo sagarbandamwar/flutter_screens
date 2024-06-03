@@ -28,83 +28,96 @@ class _JobListPageState extends State<JobListPage> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      RoutesNames.candidateList,
+          (Route<dynamic> route) => false,
+    );
+    return false;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: GradientAppBar(
-        title: AppConstants.jobList,
-        gradient: const LinearGradient(
-          colors: [Colors.white, Colors.grey],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: GradientAppBar(
+          title: AppConstants.jobList,
+          gradient: const LinearGradient(
+            colors: [Colors.white, Colors.grey],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-      ),
-      body: ChangeNotifierProvider<JobsViewModel>(
-        create: (BuildContext context) => jobsViewModel,
-        child: Consumer<JobsViewModel>(
-          builder: (context, value, child) {
-            switch (value.jobsList.status) {
-              case Status.LOADING:
-                return const Center(child: CircularProgressIndicator());
-              case Status.ERROR:
-                return Center(child: Text(value.jobsList.message.toString()));
-              case Status.COMPLETED:
-                var jobs =
-                    value.jobsList.data?.jobsList?.reversed.toList() ?? [];
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          // SizedBox(
-                          //   width: 150.0,
-                          //   child: RoundedButton(
-                          //     title: 'Create Candidate',
-                          //     onPress: () {
-                          //       Navigator.pushNamed(
-                          //           context, RoutesNames.createCandidate);
-                          //     },
-                          //   ),
-                          // ),
-                          // const SizedBox(width: 25.0),
-                          SizedBox(
-                            width: 150.0,
-                            child: RoundedButton(
-                              color: AppColors.orange,
-                              title: 'Create New Job',
-                              onPress: () {
-                                Navigator.pushNamed(
-                                    context, RoutesNames.createJob);
-                              },
+        body: ChangeNotifierProvider<JobsViewModel>(
+          create: (BuildContext context) => jobsViewModel,
+          child: Consumer<JobsViewModel>(
+            builder: (context, value, child) {
+              switch (value.jobsList.status) {
+                case Status.LOADING:
+                  return const Center(child: CircularProgressIndicator());
+                case Status.ERROR:
+                  return Center(child: Text(value.jobsList.message.toString()));
+                case Status.COMPLETED:
+                  var jobs =
+                      value.jobsList.data?.jobsList?.reversed.toList() ?? [];
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            // SizedBox(
+                            //   width: 150.0,
+                            //   child: RoundedButton(
+                            //     title: 'Create Candidate',
+                            //     onPress: () {
+                            //       Navigator.pushNamed(
+                            //           context, RoutesNames.createCandidate);
+                            //     },
+                            //   ),
+                            // ),
+                            // const SizedBox(width: 25.0),
+                            SizedBox(
+                              width: 150.0,
+                              child: RoundedButton(
+                                color: AppColors.orange,
+                                title: 'Create New Job',
+                                onPress: () {
+                                  Navigator.pushNamed(
+                                      context, RoutesNames.createJob);
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16.0),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: jobs.length ?? 0,
-                          itemBuilder: (context, index) {
-                            var job = jobs[index];
-                            return JobCard(
-                              jobTitle: job?.jobName ?? "",
-                              jobType: job?.jobType ?? "",
-                              description: job?.jobDesc ?? "",
-                              appliedCount: 74,
-                              daysLeft: 30,
-                            );
-                          },
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              default:
-                return Container(); // or some default widget
-            }
-          },
+                        const SizedBox(height: 16.0),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: jobs.length ?? 0,
+                            itemBuilder: (context, index) {
+                              var job = jobs[index];
+                              return JobCard(
+                                jobTitle: job?.jobName ?? "",
+                                jobType: job?.jobType ?? "",
+                                description: job?.jobDesc ?? "",
+                                appliedCount: 74,
+                                daysLeft: 30,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                default:
+                  return Container(); // or some default widget
+              }
+            },
+          ),
         ),
       ),
     );
