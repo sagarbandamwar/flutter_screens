@@ -56,7 +56,7 @@ class _CreateSessionState extends State<CreateSession> {
                     const Text(
                         'Note: Please enter duration in minutes i.e. 15, 30, 45'),
                     const SizedBox(
-                      height: 4.0,
+                      height: 8.0,
                     ),
                     TextFormField(
                       decoration: const InputDecoration(

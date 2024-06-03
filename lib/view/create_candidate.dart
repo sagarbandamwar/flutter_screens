@@ -105,7 +105,7 @@ class _CandidatePageState extends State<CandidatePage> {
                         fontSize: 12.0,
                         color: AppColors.grayColor),
                   ),
-                  const SizedBox(height: 5.0),
+                  const SizedBox(height: 8.0),
                   TextFormField(
                     decoration: const InputDecoration(
                         enabledBorder: OutlineInputBorder(
