@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+
 import '../repository/create_session_repository.dart';
 import '../utils/utils.dart';
 
@@ -8,6 +9,7 @@ class CreateSessionViewModel with ChangeNotifier {
   final _myRepo = CreateSessionRepository();
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   void setLoading(bool value) {
@@ -15,6 +17,8 @@ class CreateSessionViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  // Call back function
+  void Function()? onSessionSuccess;
 
   Future<void> createSessionWithQueryParam(
       Map<String, String> data, BuildContext context) async {
@@ -28,15 +32,18 @@ class CreateSessionViewModel with ChangeNotifier {
         // Handle successful response
         Utils.printLogs('Response->${response.body.toString()}');
         Utils.printLogs('Session created successfully');
-        Utils.showFlushBarSuccessMessage('Session created successfully', context);
+        Utils.showFlushBarSuccessMessage(
+            'Session created successfully', context);
         Future.delayed(const Duration(seconds: 3), () {
           Navigator.pop(context);
+          onSessionSuccess?.call();
         });
         setLoading(false);
       } else {
-        Utils.showFlushBarErrorMessage(response.toString(), context);
+        Utils.showFlushBarErrorMessage(response.body.toString(), context);
         // Handle error response
-        Utils.printLogs('Failed to create session: ${response.body.toString()}');
+        Utils.printLogs(
+            'Failed to create session: ${response.body.toString()}');
         Future.delayed(const Duration(seconds: 3), () {
           Navigator.pop(context);
         });

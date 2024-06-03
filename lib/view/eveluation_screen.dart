@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mvvm/model/questionModel.dart';
+import 'package:flutter_mvvm/utils/routes/routes_names.dart';
 import 'package:provider/provider.dart';
 
 import '../view_model/preScreeningViewModel.dart';
@@ -45,7 +46,9 @@ class _AssessmentReviewScreenState extends State<AssessmentReviewScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, RoutesNames.candidateList);
+          },
         ),
         title: Text.rich(
           TextSpan(
