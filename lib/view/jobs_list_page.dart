@@ -48,11 +48,11 @@ class _JobListPageState extends State<JobListPage> {
               case Status.ERROR:
                 return Center(child: Text(value.jobsList.message.toString()));
               case Status.COMPLETED:
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: Row(
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
@@ -79,24 +79,24 @@ class _JobListPageState extends State<JobListPage> {
                           ),
                         ],
                       ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        reverse: true,
-                        itemCount: value.jobsList.data?.jobsList?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          var job = value.jobsList.data?.jobsList?[index];
-                          return  JobCard(
-                            jobTitle: job?.jobName ?? "",
-                            jobType: job?.jobType ?? "",
-                            description: job?.jobDesc ?? "",
-                            appliedCount: 74,
-                            daysLeft: 30,
-                          );
-                        },
+                      const SizedBox(height: 16.0),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: value.jobsList.data?.jobsList?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            var job = value.jobsList.data?.jobsList?[index];
+                            return JobCard(
+                              jobTitle: job?.jobName ?? "",
+                              jobType: job?.jobType ?? "",
+                              description: job?.jobDesc ?? "",
+                              appliedCount: 74,
+                              daysLeft: 30,
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               default:
                 return Container(); // or some default widget
@@ -115,7 +115,8 @@ class JobCard extends StatefulWidget {
   final int appliedCount;
   final int daysLeft;
 
-  JobCard({
+  const JobCard({
+    super.key,
     required this.jobTitle,
     required this.jobType,
     required this.description,
@@ -137,7 +138,7 @@ class _JobCardState extends State<JobCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(1.0),
       ),
-      margin: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 20),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -150,11 +151,6 @@ class _JobCardState extends State<JobCard> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8.0),
-            // Wrap(
-            //   spacing: 8.0,
-            //   children: tags.map((tag) => Chip(label: Text(tag))).toList(),
-            // ),
             const SizedBox(height: 8.0),
             Text(
               widget.description,
@@ -169,7 +165,7 @@ class _JobCardState extends State<JobCard> {
                     _expanded = true;
                   });
                 },
-                child: Text("Show more",textAlign: TextAlign.end),
+                child: const Text("Show more", textAlign: TextAlign.end),
               ),
             const SizedBox(height: 8.0),
             Row(
@@ -182,10 +178,6 @@ class _JobCardState extends State<JobCard> {
                 const SizedBox(width: 4.0),
                 const Text("India"),
                 const Spacer(),
-                // Icon(Icons.person_outline, size: 20.0),
-                // SizedBox(width: 4.0),
-                // Text('$appliedCount applied'),
-                // SizedBox(width: 16.0),
                 const Icon(Icons.access_time_outlined, size: 20.0),
                 const SizedBox(width: 4.0),
                 Text('${widget.daysLeft} days left'),

@@ -59,6 +59,8 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Column for buttons
               Row(
@@ -75,20 +77,18 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                           MaterialPageRoute(
                             builder: (context) =>
                                 ChangeNotifierProvider<CandidateViewModel>(
-                              create: (_) => CandidateViewModel()
-                                ..onCandidateCreated = () {
-                                  // Refresh the candidate list after a candidate is created
-                                  setState(() {
-                                    candidateViewModel
-                                        .getCandidatesList(context);
-                                  });
-                                },
-                              child: const CandidatePage(),
-                            ),
+                                  create: (_) => CandidateViewModel()
+                                    ..onCandidateCreated = () {
+                                      // Refresh the candidate list after a candidate is created
+                                      setState(() {
+                                        candidateViewModel
+                                            .getCandidatesList(context);
+                                      });
+                                    },
+                                  child: const CandidatePage(),
+                                ),
                           ),
                         );
-                        /* Navigator.pushNamed(
-                            context, RoutesNames.createCandidate);*/
                       },
                     ),
                   ),
@@ -116,6 +116,7 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                   ),
                 ],
               ),
+              const SizedBox(height: 16.0),
               Expanded(
                 child: Consumer<CandidateViewModel>(
                   builder: (context, value, child) {
@@ -125,19 +126,18 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                       case Status.ERROR:
                         return Center(
                             child:
-                                Text(value.candidateList.message.toString()));
+                            Text(value.candidateList.message.toString()));
                       case Status.COMPLETED:
                         return ListView.builder(
-                          reverse: true,
                           itemCount:
-                              value.candidateList.data?.candidateList?.length ??
-                                  0,
+                          value.candidateList.data?.candidateList?.length ??
+                              0,
                           itemBuilder: (context, index) {
                             var candidate =
-                                value.candidateList.data?.candidateList?[index];
+                            value.candidateList.data?.candidateList?[index];
                             return Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 300.0, vertical: 6.0),
+                                  horizontal: 16.0, vertical: 6.0),
                               child: Card(
                                 elevation: 4.0,
                                 shape: RoundedRectangleBorder(
@@ -145,25 +145,26 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                 ),
                                 color: AppColors.white,
                                 child: ListTile(
-                                  contentPadding: const EdgeInsets.all(1.0),
+                                  contentPadding: const EdgeInsets.all(8.0),
                                   leading: CircleAvatar(
-                                    radius: 50,
+                                    radius: 30,
                                     backgroundImage: AssetImage(
                                       getRandomAvatar(), // Randomly select an avatar image
                                     ),
                                   ),
+                                  title: Text(
+                                    '${candidate?.fullName?.toTitleCase()}',
+                                    style: const TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.orange,
+                                    ),
+                                  ),
                                   subtitle: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        '${candidate?.fullName?.toTitleCase()}',
-                                        style: const TextStyle(
-                                            fontFamily: 'Roboto-Regular',
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppColors.orange),
-                                      ),
                                       const SizedBox(height: 4.0),
                                       Row(
                                         children: [
@@ -180,12 +181,12 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(width: 30.0),
+                                      const SizedBox(height: 4.0),
                                       Row(
                                         children: [
                                           const Icon(Icons.settings,
                                               size: 16.0),
-                                          // Add file icon here
+                                          // Add job icon here
                                           const SizedBox(width: 4.0),
                                           Text(
                                             'Job Name:-> ${candidate?.jobName ?? 'No Job Name'}',
@@ -197,12 +198,12 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(width: 30.0),
+                                      const SizedBox(height: 4.0),
                                       Row(
                                         children: [
                                           const Icon(
                                               Icons.access_time_filled_sharp,
-                                              size: 16.0), // Add file icon here
+                                              size: 16.0), // Add status icon here
                                           const SizedBox(width: 4.0),
                                           Text(
                                             'Status:-> ${formatStatus(candidate?.status?.toString())}',
@@ -211,15 +212,15 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold,
                                               color: candidate?.status ==
-                                                      AppConstants
-                                                          .CANDIDATE_SELECTED
+                                                  AppConstants
+                                                      .CANDIDATE_SELECTED
                                                   ? Colors.green
                                                   : candidate?.status ==
-                                                          AppConstants
-                                                              .CANDIDATE_REJECTED
-                                                      ? Colors.red
-                                                      : Colors
-                                                          .black, // Default color
+                                                  AppConstants
+                                                      .CANDIDATE_REJECTED
+                                                  ? Colors.red
+                                                  : Colors
+                                                  .black, // Default color
                                             ),
                                           ),
                                         ],
@@ -227,7 +228,7 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                       const SizedBox(height: 10.0),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                        MainAxisAlignment.end,
                                         children: [
                                           if (candidate?.status ==
                                               AppConstants.SESSION_CREATED)
@@ -237,10 +238,10 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                                 Navigator.pushNamed(context,
                                                     RoutesNames.createSession,
                                                     arguments:
-                                                        candidate!.candidateId);
+                                                    candidate!.candidateId);
                                               },
                                               child:
-                                                  const Text('Create Session'),
+                                              const Text('Create Session'),
                                             ),
                                           if (candidate?.status ==
                                               AppConstants.SESSION_CREATED)
@@ -255,21 +256,21 @@ class _CandidateListPageState extends State<CandidateListPage> with RouteAware {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (BuildContext
-                                                            context) =>
+                                                    context) =>
                                                         AssessmentReviewScreen(
-                                                      candidateId: candidate!
-                                                          .candidateId,
-                                                      candidateName: candidate
-                                                          .fullName
-                                                          ?.toTitleCase(),
-                                                      jobName: candidate.jobName
-                                                          ?.toTitleCase(),
-                                                    ),
+                                                          candidateId: candidate!
+                                                              .candidateId,
+                                                          candidateName: candidate
+                                                              .fullName
+                                                              ?.toTitleCase(),
+                                                          jobName: candidate.jobName
+                                                              ?.toTitleCase(),
+                                                        ),
                                                   ),
                                                 );
                                               },
                                               child:
-                                                  const Text('View Evaluation'),
+                                              const Text('View Evaluation'),
                                             ),
                                           const SizedBox(width: 16.0),
                                         ],
