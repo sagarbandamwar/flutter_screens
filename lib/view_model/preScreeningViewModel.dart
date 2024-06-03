@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mvvm/model/questionModel.dart';
 import 'package:http/http.dart' as http;
 
+import '../repository/evaluation_repository.dart';
+import '../utils/utils.dart';
+
 class PreScreeningViewModel extends ChangeNotifier {
   List<QandAScoring> qaScoring = [];
   List<SkillsAssessment> skillsAssessment = [];
   Evaluation? assessment;
-
+  final _myRepo = SessionEvaluationRepository();
 
 
   Future<void> submitAnswers(Map<String, String> data) async {
@@ -82,5 +85,16 @@ class PreScreeningViewModel extends ChangeNotifier {
       // Exception occurred during the API call
       print('Error: $e');
     }
+  }
+
+  Future<void> selectOrRejectCandidate(String candidateId, bool isSelected, BuildContext context) async {
+    _myRepo.selectOrRejectCandidate(candidateId,isSelected).then((value) {
+      print(value.toString());
+      Utils.showFlushBarErrorMessage(value.toString(), context);
+    }).onError((error, stackTrace) {
+      Utils.printLogs('Inside On error');
+      Utils.printLogs('Create Session ${error.toString()}');
+      Utils.showFlushBarErrorMessage(error.toString(), context);
+    });
   }
 }

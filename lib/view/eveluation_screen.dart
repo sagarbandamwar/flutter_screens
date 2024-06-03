@@ -111,9 +111,13 @@ class _AssessmentReviewScreenState extends State<AssessmentReviewScreen> {
           children: [
             IconButton(icon: const Icon(Icons.report), onPressed: () {}),
             IconButton(icon: const Icon(Icons.copy), onPressed: () {}),
-            ElevatedButton(onPressed: () {}, child: const Text('Shortlist')),
+            ElevatedButton(onPressed: () {
+              createSessionViewModel.selectOrRejectCandidate(widget.candidateId.toString(), true, context);
+            }, child: const Text('Shortlist')),
             const SizedBox(width: 8),
-            ElevatedButton(onPressed: () {}, child: const Text('Reject')),
+            ElevatedButton(onPressed: () {
+              createSessionViewModel.selectOrRejectCandidate(widget.candidateId.toString(), false, context);
+            }, child: const Text('Reject')),
             const SizedBox(width: 8),
             ElevatedButton(
                 onPressed: () {

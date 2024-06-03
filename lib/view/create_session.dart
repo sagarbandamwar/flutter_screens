@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mvvm/res/components/round_button.dart';
 import 'package:flutter_mvvm/utils/utils.dart';
 import 'package:flutter_mvvm/view_model/createsession_viewmodel.dart';
@@ -66,6 +67,10 @@ class _CreateSessionState extends State<CreateSession> {
                               borderSide: BorderSide(
                                   width: 2, color: AppColors.borderColor)),
                           labelText: 'Duration*'),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
                           return 'Please enter duration';
@@ -88,6 +93,10 @@ class _CreateSessionState extends State<CreateSession> {
                               borderSide: BorderSide(
                                   width: 2, color: AppColors.borderColor)),
                           labelText: 'Number of Questions*'),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
                           return 'Please enter number of questions';
