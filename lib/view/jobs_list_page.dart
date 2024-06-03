@@ -82,6 +82,7 @@ class _JobListPageState extends State<JobListPage> {
                       const SizedBox(height: 16.0),
                       Expanded(
                         child: ListView.builder(
+                          reverse: true,
                           itemCount: value.jobsList.data?.jobsList?.length ?? 0,
                           itemBuilder: (context, index) {
                             var job = value.jobsList.data?.jobsList?[index];
